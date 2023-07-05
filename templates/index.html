@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="../static/js/java.js" defer></script>
+</head>
+<body>
+    <div class="body-cont">
+        <div class ='header'>
+            <div class="hello">Hello, <span id="username-placeholder">Guest</span></div>
+                <div>
+                    <a href="login">Login</a>
+                    <a href="register">Register</a>
+                    <a href="index">Home</a>
+                </div>
+        </div>
+        <div class = 'container'>
+            <canvas class = 'gameBoard' width = "500" height="500"></canvas>
+            <div class = 'text'>Your score is : <span class = 'score' name = "score">0</span> </div> 
+            <button class = 'reset'>Reset</button>
+        </div>
+        <div class = 'scoreboard'>
+            <div class = 'text-score'>
+                Your average score is :  
+            </div>
+            <div class = 'avg-score'>
+                0
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+        // Fetch the username
+        fetch('/get_username').then(response => response.json()).then(data => {
+            const username = data.username;
+            const usernamePlaceholder = document.getElementById('username-placeholder');
+            usernamePlaceholder.textContent = username;
+            })
+            .catch(error => {
+            console.error('Error:', error);
+            });
+        });
+        const scoreElement = document.querySelector('.score');
+        const resetButton = document.querySelector('.reset');
+
+        resetButton.addEventListener('click', () => {
+            const score = parseInt(scoreElement.textContent);
+            const username = document.getElementById('username-placeholder').textContent;
+
+            const data = {
+            username: username,
+            score: score
+            };
+
+            fetch('/add_score', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+            })
+            .then(response => response.json()).then(data => {
+                console.log(data);
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+            // Fetch the initial average score
+            fetch('/calculate_average')
+            .then(response => response.json())
+            .then(data => {
+                const averageScoreElement = document.querySelector('.avg-score');
+                const averageScore = data.average_score;
+                averageScoreElement.textContent = averageScore;
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+
+
+        scoreElement.textContent = '0';
+        });
+        
+    </script>  
+</body>
+</html>

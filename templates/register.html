@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnakeLogin</title>
+    <link rel="stylesheet" href="../static/css/style_login.css">
+    <script src="" defer></script>
+</head>
+<body>
+    <div class="body-cont">
+        <div class ='header'>
+            <div class = 'link-cont'>
+                <a href="login">Login</a>
+                <a href="register">Register</a>
+                <a href="index">Home</a>
+            </div>
+        </div>
+        <div class = 'middle'>
+            <div class = 'container'>
+                <form action="/register" method="POST" id="registerForm">
+                    <div class="username">
+                        <input type="text" name="usernameRegister" placeholder="username" required>
+                    </div>
+                    <div class="password">
+                        <input type="password" name="passwordRegister" id="password" placeholder="password" required>
+                    </div>
+                    <div class="confirmPassword">
+                        <input type="password" name="confirmPasswordRegister" id="confirmPassword" placeholder="Confirm password" required>
+                    </div>
+                    <button type="submit">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>  
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", function(event) {
+            if (!validateForm()) {
+                event.preventDefault(); // Prevent form submission
+            }
+        });
+
+        function validateForm() {
+            const passwordInput = document.getElementById("password").value;
+            const confirmPasswordInput = document.getElementById("confirmPassword").value;
+
+            if (passwordInput !== confirmPasswordInput) {
+                alert("Passwords do not match.");
+                return false; 
+            }
+
+
+            const forbiddenChars = /['"]/;
+            if (forbiddenChars.test(passwordInput)) {
+                alert("Passwords cannot contain ' or \".");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</body>
+</html>
